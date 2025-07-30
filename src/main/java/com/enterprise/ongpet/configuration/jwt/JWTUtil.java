@@ -6,12 +6,15 @@ import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
+import java.util.List;
 
 @Getter
+@Component
 public class JWTUtil {
 
     @Value("${" + ApplicationConstants.JWT_SECRET_KEY + ":" + ApplicationConstants.JWT_SECRET_DEFAULT_VALUE + "}")
@@ -23,7 +26,7 @@ public class JWTUtil {
         this.secretKey = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
     }
 
-    public String generateToken(String usuario, String authorities) {
+    public String generateToken(String usuario, List<String> authorities) {
         return Jwts.builder()
                 .setIssuer("ong-pet")
                 .setSubject(usuario)

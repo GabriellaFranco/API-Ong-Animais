@@ -21,7 +21,7 @@ public class UserDetailsService implements org.springframework.security.core.use
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         var usuario = usuarioRepository.findByEmail(username)
                 .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado: " + username));
-        List<SimpleGrantedAuthority> autoridades =usuario.getAutoridades().stream()
+        List<SimpleGrantedAuthority> autoridades = usuario.getAutoridades().stream()
                 .map(autoridade -> new SimpleGrantedAuthority(autoridade.getName())).toList();
         return new User(usuario.getEmail(), usuario.getSenha(), autoridades);
     }
