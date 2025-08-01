@@ -1,9 +1,8 @@
 package com.enterprise.ongpet.controller;
 
 import com.enterprise.ongpet.configuration.jwt.JWTUtil;
-import com.enterprise.ongpet.model.dto.LoginRequestDTO;
-import com.enterprise.ongpet.model.dto.LoginResponseDTO;
-import jakarta.validation.Valid;
+import com.enterprise.ongpet.model.dto.auth.LoginRequestDTO;
+import com.enterprise.ongpet.model.dto.auth.LoginResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;

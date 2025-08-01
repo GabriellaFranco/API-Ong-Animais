@@ -1,4 +1,4 @@
-package com.enterprise.ongpet.model.dto;
+package com.enterprise.ongpet.model.dto.auth;
 
 import jakarta.validation.constraints.NotBlank;
 
