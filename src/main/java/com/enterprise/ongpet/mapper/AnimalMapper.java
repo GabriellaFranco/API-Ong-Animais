@@ -8,6 +8,7 @@ import com.enterprise.ongpet.model.entity.Usuario;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;
+import java.util.Optional;
 
 @Component
 public class AnimalMapper {
@@ -41,11 +42,9 @@ public class AnimalMapper {
                 .build();
     }
 
-    public Animal updateFromDTO(AnimalUpdateDTO updateDTO, Animal animalAtual) {
-        return Animal.builder()
-                .descricao(Objects.requireNonNullElse(updateDTO.descricao(), animalAtual.getDescricao()))
-                .fotos(Objects.requireNonNullElse(updateDTO.fotos(), animalAtual.getFotos()))
-                .disponivel(Objects.requireNonNullElse(updateDTO.disponivel(), animalAtual.getDisponivel()))
-                .build();
+    public void updateFromDTO(AnimalUpdateDTO updateDTO, Animal animalAtual) {
+        Optional.ofNullable(updateDTO.descricao()).ifPresent(animalAtual::setDescricao);
+        Optional.ofNullable(updateDTO.fotos()).ifPresent(animalAtual::setFotos);
+        Optional.ofNullable(updateDTO.disponivel()).ifPresent(animalAtual::setDisponivel);
     }
 }

@@ -7,11 +7,12 @@ import com.enterprise.ongpet.model.entity.Usuario;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;
+import java.util.Optional;
 
 @Component
 public class UsuarioMapper {
 
-    private Usuario toUsuario(UsuarioRequestDTO usuarioDTO) {
+    public Usuario toUsuario(UsuarioRequestDTO usuarioDTO) {
         return Usuario.builder()
                 .nome(usuarioDTO.nome())
                 .email(usuarioDTO.email())
@@ -26,7 +27,7 @@ public class UsuarioMapper {
                 .build();
     }
 
-    private UsuarioResponseDTO toUsuarioResponseDTO(Usuario usuario) {
+    public UsuarioResponseDTO toUsuarioResponseDTO(Usuario usuario) {
         return UsuarioResponseDTO.builder()
                 .id(usuario.getId())
                 .nome(usuario.getNome())
@@ -41,14 +42,13 @@ public class UsuarioMapper {
                 .build();
     }
 
-    private Usuario updateFromDTO(UsuarioUpdateDTO updateDTO, Usuario usuarioAtual) {
-        return Usuario.builder()
-                .email(Objects.requireNonNullElse(updateDTO.email(), usuarioAtual.getEmail()))
-                .cep(Objects.requireNonNullElse(updateDTO.cep(), usuarioAtual.getCep()))
-                .cidade(Objects.requireNonNullElse(updateDTO.cidade(), usuarioAtual.getCidade()))
-                .bairro(Objects.requireNonNullElse(updateDTO.bairro(), usuarioAtual.getBairro()))
-                .rua(Objects.requireNonNullElse(updateDTO.rua(), usuarioAtual.getRua()))
-                .numEndereco(Objects.requireNonNullElse(updateDTO.numEndereco(), usuarioAtual.getNumEndereco()))
-                .build();
+    public void updateFromDTO(UsuarioUpdateDTO updateDTO, Usuario usuarioAtual) {
+        Optional.ofNullable(updateDTO.email()).ifPresent(usuarioAtual::setEmail);
+        Optional.ofNullable(updateDTO.cep()).ifPresent(usuarioAtual::setCep);
+        Optional.ofNullable(updateDTO.cidade()).ifPresent(usuarioAtual::setCidade);
+        Optional.ofNullable(updateDTO.bairro()).ifPresent(usuarioAtual::setBairro);
+        Optional.ofNullable(updateDTO.rua()).ifPresent(usuarioAtual::setRua);
+        Optional.ofNullable(updateDTO.numEndereco()).ifPresent(usuarioAtual::setNumEndereco);
+        Optional.ofNullable(updateDTO.perfil()).ifPresent(usuarioAtual::setPerfil);
     }
 }

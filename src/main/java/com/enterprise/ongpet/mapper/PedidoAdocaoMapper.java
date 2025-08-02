@@ -8,6 +8,7 @@ import com.enterprise.ongpet.model.entity.Usuario;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;
+import java.util.Optional;
 
 @Component
 public class PedidoAdocaoMapper {
@@ -40,10 +41,8 @@ public class PedidoAdocaoMapper {
     }
 
 
-    public PedidoAdocao updateFromDTO(PedidoAdocaoUpdateDTO pedidoAdocaoDTO, PedidoAdocao pedidoAdocaoAtual) {
-        return PedidoAdocao.builder()
-                .status(Objects.requireNonNull(pedidoAdocaoDTO.statusAdocao()))
-                .observacoes(Objects.requireNonNull(pedidoAdocaoDTO.observacoes()))
-                .build();
+    public void updateFromDTO(PedidoAdocaoUpdateDTO updateDTO, PedidoAdocao pedidoAdocaoAtual) {
+        Optional.ofNullable(updateDTO.observacoes()).ifPresent(pedidoAdocaoAtual::setObservacoes);
+        Optional.ofNullable(updateDTO.statusAdocao()).ifPresent(pedidoAdocaoAtual::setStatus);
     }
 }
