@@ -7,8 +7,14 @@ import com.enterprise.ongpet.mapper.UsuarioMapper;
 import com.enterprise.ongpet.model.dto.usuario.UsuarioRequestDTO;
 import com.enterprise.ongpet.model.dto.usuario.UsuarioResponseDTO;
 import com.enterprise.ongpet.model.dto.usuario.UsuarioUpdateDTO;
+import com.enterprise.ongpet.model.entity.Usuario;
 import com.enterprise.ongpet.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,8 +29,9 @@ public class UsuarioService {
     private final UsuarioMapper usuarioMapper;
     private final PasswordEncoder passwordEncoder;
 
-    public List<UsuarioResponseDTO> getAllUsuarios() {
-        return usuarioRepository.findAll().stream().map(usuarioMapper::toUsuarioResponseDTO).toList();
+    public Page<UsuarioResponseDTO> getAllUsuarios(Pageable pageable) {
+        var usuarios = usuarioRepository.findAll(pageable);
+        return usuarios.map(usuarioMapper::toUsuarioResponseDTO);
     }
 
     public UsuarioResponseDTO getUsuarioById(Long id) {
@@ -66,7 +73,18 @@ public class UsuarioService {
     private void validarEmail(String email, Long id) {
         usuarioRepository.findByEmail(email)
                 .filter(usuario -> !usuario.getId().equals(id))
-                .ifPresent(usuario -> { throw new BusinessException("Email já cadastrado: " + email); });
+                .ifPresent(usuario -> {
+                    throw new BusinessException("Email já cadastrado: " + email);
+                });
+    }
+
+    protected Usuario getUsuarioLogado() {
+        var usuario = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (!(usuario instanceof UserDetails userDetails)) {
+            throw new BadCredentialsException("Usuário não autenticado");
+        }
+        return usuarioRepository.findByEmail(userDetails.getUsername())
+                .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado: " + userDetails.getUsername()));
     }
 
 }

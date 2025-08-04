@@ -1,5 +1,6 @@
 package com.enterprise.ongpet.model.entity;
 
+import com.enterprise.ongpet.enums.Especie;
 import com.enterprise.ongpet.enums.Genero;
 import com.enterprise.ongpet.enums.PorteAnimal;
 import jakarta.persistence.*;
@@ -24,6 +25,9 @@ public class Animal {
 
     @Column(nullable = false)
     private String nome;
+
+    @Column(nullable = false)
+    private Especie especie;
 
     @Column(nullable = false)
     private Long idade;

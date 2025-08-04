@@ -16,6 +16,7 @@ public class AnimalMapper {
     public Animal toAnimal(AnimalRequestDTO animalDTO, Usuario responsavel) {
         return Animal.builder()
                 .nome(animalDTO.nome())
+                .especie(animalDTO.especie())
                 .idade(animalDTO.idade())
                 .porte(animalDTO.porte())
                 .genero(animalDTO.genero())
@@ -29,6 +30,7 @@ public class AnimalMapper {
         return AnimalResponseDTO.builder()
                 .id(animal.getId())
                 .nome(animal.getNome())
+                .especie(animal.getEspecie())
                 .idade(animal.getIdade())
                 .genero(animal.getGenero())
                 .porte(animal.getPorte())
@@ -43,8 +45,6 @@ public class AnimalMapper {
     }
 
     public void updateFromDTO(AnimalUpdateDTO updateDTO, Animal animalAtual) {
-        Optional.ofNullable(updateDTO.descricao()).ifPresent(animalAtual::setDescricao);
-        Optional.ofNullable(updateDTO.fotos()).ifPresent(animalAtual::setFotos);
         Optional.ofNullable(updateDTO.disponivel()).ifPresent(animalAtual::setDisponivel);
     }
 }

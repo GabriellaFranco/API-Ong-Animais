@@ -15,6 +15,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
@@ -88,8 +91,15 @@ public class UsuarioServiceTest {
 
     @Test
     void getAllUsuarios_quandoChamado_deveRetornarListaDeUsuarios() {
-        when(usuarioRepository.findAll()).thenReturn(List.of(usuario));
-        var usuarios = usuarioService.getAllUsuarios();
+        var pageable = PageRequest.of(0, 10);
+        List<Usuario> usuariosList = List.of(usuario);
+        Page<Usuario> usuarioPage = new PageImpl<>(usuariosList, pageable, usuariosList.size());
+
+        when(usuarioRepository.findAll(pageable)).thenReturn(usuarioPage);
+        when(usuarioMapper.toUsuarioResponseDTO(usuario)).thenReturn(usuarioResponseDTO);
+
+        var usuarios = usuarioService.getAllUsuarios(pageable);
+
         assertThat(usuarios)
                 .isNotEmpty()
                 .hasSize(1);
