@@ -3,15 +3,17 @@ package com.enterprise.ongpet.model.dto.doacao;
 import lombok.Builder;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 @Builder
 public record DoacaoResponseDTO(
         Long id,
         BigDecimal valor,
-        UserDTO doador
+        LocalDate dataDoacao,
+        UsuarioDTO doador
 ) {
     @Builder
-    public record UserDTO(
+    public record UsuarioDTO(
             Long id,
             String nome
     ) {}
