@@ -1,13 +1,16 @@
 package com.enterprise.ongpet.service;
 
 import com.enterprise.ongpet.enums.PerfilUsuario;
+import com.enterprise.ongpet.enums.TipoAutoridade;
 import com.enterprise.ongpet.exception.BusinessException;
 import com.enterprise.ongpet.exception.ResourceNotFoundException;
 import com.enterprise.ongpet.mapper.UsuarioMapper;
 import com.enterprise.ongpet.model.dto.usuario.UsuarioRequestDTO;
 import com.enterprise.ongpet.model.dto.usuario.UsuarioResponseDTO;
 import com.enterprise.ongpet.model.dto.usuario.UsuarioUpdateDTO;
+import com.enterprise.ongpet.model.entity.Autoridade;
 import com.enterprise.ongpet.model.entity.Usuario;
+import com.enterprise.ongpet.repository.AuthRepository;
 import com.enterprise.ongpet.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -27,6 +30,7 @@ public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
     private final UsuarioMapper usuarioMapper;
+    private final AuthRepository authRepository;
     private final PasswordEncoder passwordEncoder;
 
     public Page<UsuarioResponseDTO> getAllUsuarios(Pageable pageable) {
@@ -43,8 +47,11 @@ public class UsuarioService {
     public UsuarioResponseDTO createUsuario(UsuarioRequestDTO usuarioDTO) {
         validarEmail(usuarioDTO.email(), null);
         var usuarioMapeado = usuarioMapper.toUsuario(usuarioDTO);
+        var autoridadePadrao = authRepository.findByName(TipoAutoridade.ROLE_PADRAO.name())
+                .orElseThrow(() -> new ResourceNotFoundException("Autoridade não encontrada"));
 
         usuarioMapeado.setPerfil(PerfilUsuario.PADRAO);
+        usuarioMapeado.setAutoridades(List.of(autoridadePadrao));
         usuarioMapeado.setSenha(passwordEncoder.encode(usuarioMapeado.getSenha()));
 
         var usuarioSalvo = usuarioRepository.save(usuarioMapeado);
