@@ -140,4 +140,5 @@ public class DoacaoServiceTest {
         DoacaoRequestDTO doacaoIncorreta = new DoacaoRequestDTO(new BigDecimal("0.50"));
         assertThrows(BusinessException.class, () -> doacaoService.createDoacao(doacaoIncorreta));
     }
+
 }
