@@ -3,16 +3,18 @@ package com.enterprise.ongpet.mapper;
 import com.enterprise.ongpet.model.dto.pedidoadocao.PedidoAdocaoRequestDTO;
 import com.enterprise.ongpet.model.dto.pedidoadocao.PedidoAdocaoResponseDTO;
 import com.enterprise.ongpet.model.dto.pedidoadocao.PedidoAdocaoUpdateDTO;
+import com.enterprise.ongpet.model.entity.Animal;
 import com.enterprise.ongpet.model.entity.PedidoAdocao;
 import com.enterprise.ongpet.model.entity.Usuario;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;
+import java.util.Optional;
 
 @Component
 public class PedidoAdocaoMapper {
 
-    public PedidoAdocao toPedidoAdocao(PedidoAdocaoRequestDTO pedidoAdocaoDTO, Usuario adotante, Usuario voluntario) {
+    public PedidoAdocao toPedidoAdocao(PedidoAdocaoRequestDTO pedidoAdocaoDTO, Animal animal, Usuario adotante, Usuario voluntario) {
         return PedidoAdocao.builder()
                 .observacoes(pedidoAdocaoDTO.observacoes())
                 .adotante(adotante)
@@ -40,10 +42,8 @@ public class PedidoAdocaoMapper {
     }
 
 
-    public PedidoAdocao updateFromDTO(PedidoAdocaoUpdateDTO pedidoAdocaoDTO, PedidoAdocao pedidoAdocaoAtual) {
-        return PedidoAdocao.builder()
-                .status(Objects.requireNonNull(pedidoAdocaoDTO.statusAdocao()))
-                .observacoes(Objects.requireNonNull(pedidoAdocaoDTO.observacoes()))
-                .build();
+    public void updateFromDTO(PedidoAdocaoUpdateDTO updateDTO, PedidoAdocao pedidoAdocaoAtual) {
+        Optional.ofNullable(updateDTO.observacoes()).ifPresent(pedidoAdocaoAtual::setObservacoes);
+        Optional.ofNullable(updateDTO.statusAdocao()).ifPresent(pedidoAdocaoAtual::setStatus);
     }
 }

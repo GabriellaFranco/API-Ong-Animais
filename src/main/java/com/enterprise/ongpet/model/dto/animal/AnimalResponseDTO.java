@@ -1,5 +1,6 @@
 package com.enterprise.ongpet.model.dto.animal;
 
+import com.enterprise.ongpet.enums.Especie;
 import com.enterprise.ongpet.enums.Genero;
 import com.enterprise.ongpet.enums.PorteAnimal;
 import lombok.Builder;
@@ -10,6 +11,7 @@ import java.util.List;
 public record AnimalResponseDTO(
         Long id,
         String nome,
+        Especie especie,
         Long idade,
         Genero genero,
         PorteAnimal porte,

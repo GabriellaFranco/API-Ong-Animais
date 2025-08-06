@@ -17,6 +17,8 @@ public class Autoridade {
     private Long id;
     private String name;
 
-    @ManyToMany(mappedBy = "autoridades")
+    @ManyToMany(mappedBy = "autoridades", fetch = FetchType.EAGER)
     List<Usuario> usuarios = new ArrayList<>();
+
+    public Autoridade(String role) {}
 }

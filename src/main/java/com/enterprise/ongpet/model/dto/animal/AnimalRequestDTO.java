@@ -1,5 +1,6 @@
 package com.enterprise.ongpet.model.dto.animal;
 
+import com.enterprise.ongpet.enums.Especie;
 import com.enterprise.ongpet.enums.Genero;
 import com.enterprise.ongpet.enums.PorteAnimal;
 import jakarta.validation.constraints.NotBlank;
@@ -16,6 +17,9 @@ public record AnimalRequestDTO(
         @NotBlank
         @Size(min = 3, max = 50, message = "O nome deve ter entre 3 e 50 caracteres")
         String nome,
+
+        @NotBlank
+        Especie especie,
 
         @NotBlank
         @Positive(message = "A idade deve ser um número positivo")

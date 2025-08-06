@@ -8,6 +8,7 @@ import com.enterprise.ongpet.model.entity.Usuario;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;
+import java.util.Optional;
 
 @Component
 public class AnimalMapper {
@@ -15,6 +16,7 @@ public class AnimalMapper {
     public Animal toAnimal(AnimalRequestDTO animalDTO, Usuario responsavel) {
         return Animal.builder()
                 .nome(animalDTO.nome())
+                .especie(animalDTO.especie())
                 .idade(animalDTO.idade())
                 .porte(animalDTO.porte())
                 .genero(animalDTO.genero())
@@ -28,6 +30,7 @@ public class AnimalMapper {
         return AnimalResponseDTO.builder()
                 .id(animal.getId())
                 .nome(animal.getNome())
+                .especie(animal.getEspecie())
                 .idade(animal.getIdade())
                 .genero(animal.getGenero())
                 .porte(animal.getPorte())
@@ -41,11 +44,7 @@ public class AnimalMapper {
                 .build();
     }
 
-    public Animal updateFromDTO(AnimalUpdateDTO updateDTO, Animal animalAtual) {
-        return Animal.builder()
-                .descricao(Objects.requireNonNullElse(updateDTO.descricao(), animalAtual.getDescricao()))
-                .fotos(Objects.requireNonNullElse(updateDTO.fotos(), animalAtual.getFotos()))
-                .disponivel(Objects.requireNonNullElse(updateDTO.disponivel(), animalAtual.getDisponivel()))
-                .build();
+    public void updateFromDTO(AnimalUpdateDTO updateDTO, Animal animalAtual) {
+        Optional.ofNullable(updateDTO.disponivel()).ifPresent(animalAtual::setDisponivel);
     }
 }

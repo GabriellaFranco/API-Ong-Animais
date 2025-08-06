@@ -1,22 +1,20 @@
 package com.enterprise.ongpet.repository;
 
-import com.enterprise.ongpet.enums.PerfilUsuario;
+import com.enterprise.ongpet.model.entity.Doacao;
 import com.enterprise.ongpet.model.entity.Usuario;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-import java.util.Optional;
+import java.time.LocalDateTime;
 
 @Repository
-public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
+public interface DoacaoRepository extends JpaRepository<Doacao, Long> {
 
     @Override
-    Page<Usuario> findAll(Pageable pageable);
+    Page<Doacao> findAll(Pageable pageable);
 
-    Optional<Usuario> findByEmail(String email);
+    boolean existsByUsuarioAndDataCriacaoBetween(Usuario usuario, LocalDateTime inicio, LocalDateTime fim);
 
-    List<Usuario> findByPerfil(PerfilUsuario perfil);
 }

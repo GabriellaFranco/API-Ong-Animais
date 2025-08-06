@@ -3,6 +3,7 @@ package com.enterprise.ongpet.model.dto.usuario;
 import com.enterprise.ongpet.enums.PerfilUsuario;
 import lombok.Builder;
 
+
 @Builder
 public record UsuarioResponseDTO(
         Long id,
