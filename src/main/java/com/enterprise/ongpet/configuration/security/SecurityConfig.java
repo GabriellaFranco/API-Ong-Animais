@@ -7,6 +7,7 @@ import com.enterprise.ongpet.filter.RequestLoggingFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -40,8 +41,9 @@ public class SecurityConfig {
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/auth/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                        .anyRequest().authenticated()
+                        .requestMatchers("/auth/login", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                        .requestMatchers(HttpMethod.PATCH, "/auth/usuarios/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PATCH, "/auth/alterar-senha").hasAnyRole("ADMIN", "VOLUNTARIO", "PADRAO")
                 )
                 .addFilterBefore(jwtTokenValidator, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(requestLoggingFilter, UsernamePasswordAuthenticationFilter.class)

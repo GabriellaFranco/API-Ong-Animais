@@ -9,7 +9,9 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -17,25 +19,19 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import javax.crypto.SecretKey;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.security.Key;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class JWTTokenValidator extends OncePerRequestFilter {
 
-    private static final Key SIGNIN_KEY = Keys.hmacShaKeyFor(
-            ApplicationConstants.JWT_SECRET_DEFAULT_VALUE.getBytes(StandardCharsets.UTF_8)
-    );
-
-    private static final JwtParser JWT_PARSER = Jwts
-            .parserBuilder()
-            .setSigningKey(SIGNIN_KEY)
-            .build();
+    private final JwtParser parser;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
@@ -51,7 +47,7 @@ public class JWTTokenValidator extends OncePerRequestFilter {
         String token = header.replace("Bearer ", "");
 
         try {
-            Claims claims = JWT_PARSER.parseClaimsJws(token).getBody();
+            Claims claims = parser.parseClaimsJws(token).getBody();
             String username = claims.getSubject();
 
             List<SimpleGrantedAuthority> authorities = Collections.emptyList();
@@ -59,7 +55,13 @@ public class JWTTokenValidator extends OncePerRequestFilter {
             Object authClaim = claims.get("authorities");
             if (authClaim instanceof List<?>) {
                 authorities = ((List<?>) authClaim).stream()
-                        .map(role -> new SimpleGrantedAuthority(role.toString()))
+                        .map(role -> {
+                            String roleName = role.toString();
+                            if (!roleName.startsWith("ROLE_")) {
+                                roleName = "ROLE_" + roleName;
+                            }
+                            return new SimpleGrantedAuthority(roleName);
+                        })
                         .collect(Collectors.toList());
             }
 
@@ -72,11 +74,9 @@ public class JWTTokenValidator extends OncePerRequestFilter {
 
         } catch (Exception e) {
             SecurityContextHolder.clearContext();
-            log.error("JWT token inválido: {}", e.getMessage());
+            log.error("JWT token inválido: " + e.getMessage(), e);
         }
-
 
         filterChain.doFilter(request, response);
     }
-
 }
