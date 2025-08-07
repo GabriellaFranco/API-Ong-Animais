@@ -9,10 +9,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import javax.swing.text.html.Option;
-import java.util.List;
-import java.util.Optional;
-
 @Repository
 public interface PedidoAdocaoRepository extends JpaRepository<PedidoAdocao, Long> {
 
@@ -21,11 +17,9 @@ public interface PedidoAdocaoRepository extends JpaRepository<PedidoAdocao, Long
 
     boolean existsByAdotanteAndAnimalAndStatus(Usuario usuario, Animal animal, StatusAdocao statusAdocao);
 
-    long countByUsuarioAndStatus(Usuario adotante, StatusAdocao statusAdocao);
+    long countByAdotanteAndStatus(Usuario adotante, StatusAdocao statusAdocao);
 
     long countByVoluntarioResponsavelAndStatus(Usuario voluntario, StatusAdocao statusAdocao);
-
-    boolean existsByAnimalAndStatusIn(Animal animal, List<StatusAdocao> status);
 
 
 }

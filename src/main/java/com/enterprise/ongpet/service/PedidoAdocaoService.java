@@ -92,7 +92,7 @@ public class PedidoAdocaoService {
     }
 
     private void validarLimiteDePedidosPendentesPorUsuario(Usuario usuario) {
-        var pedidosPendentes = pedidoAdocaoRepository.countByUsuarioAndStatus(usuario, StatusAdocao.SOLICITADA);
+        var pedidosPendentes = pedidoAdocaoRepository.countByAdotanteAndStatus(usuario, StatusAdocao.SOLICITADA);
         if (pedidosPendentes >= 3) {
             throw new BusinessException("Você já possui 3 pedidos de adoção pendentes. Aguarde avaliação antes de criar novos pedidos");
         }

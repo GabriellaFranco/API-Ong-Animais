@@ -14,6 +14,6 @@ public interface AnimalRepository extends JpaRepository<Animal, Long> {
      @Override
      Page<Animal> findAll(Pageable pageable);
 
-    boolean existsByNomeAndEspecieAndUsuario(String nome, Especie especie, Usuario usuario);
+    boolean existsByNomeAndEspecieAndResponsavel(String nome, Especie especie, Usuario responsavel);
 
 }

@@ -65,7 +65,7 @@ public class AnimalService {
     }
 
     private void validarRegistroUnico(AnimalRequestDTO animalDTO, Usuario usuario) {
-        var animalExiste = animalRepository.existsByNomeAndEspecieAndUsuario(animalDTO.nome(), animalDTO.especie(), usuario);
+        var animalExiste = animalRepository.existsByNomeAndEspecieAndResponsavel(animalDTO.nome(), animalDTO.especie(), usuario);
         if (animalExiste) {
             throw new BusinessException("Já existe um animal com esse nome e espécie para este usuário.");
         }

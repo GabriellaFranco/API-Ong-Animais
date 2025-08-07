@@ -6,6 +6,7 @@ import com.enterprise.ongpet.model.dto.auth.UpdateSenhaDTO;
 import com.enterprise.ongpet.repository.AuthRepository;
 import com.enterprise.ongpet.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -32,6 +33,7 @@ public class AuthService {
     }
 
     @Transactional
+    @PreAuthorize("hasRole('ADMIN')")
     public void atualizarPerfilEAutoridade(Long idUsuario, AtualizarPerfilEAutoridadesDTO dto) {
         var usuario = usuarioRepository.findById(idUsuario)
                 .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado: " + idUsuario));

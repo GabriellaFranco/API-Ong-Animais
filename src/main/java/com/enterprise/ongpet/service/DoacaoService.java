@@ -64,10 +64,10 @@ public class DoacaoService {
     private void validarIntervaloMinimoEntreDoacoes(Usuario usuario) {
         var agora = LocalDateTime.now();
         var inicio = agora.minusMinutes(1);
-        boolean existe = doacaoRepository.existsByUsuarioAndDataCriacaoBetween(usuario, inicio, agora);
+        boolean existe = doacaoRepository.existsByDoadorAndDataBetween(usuario, inicio, agora);
 
         if (existe) {
-            throw new BusinessException("Uma doação com o mesmo valor já foi registrada recentemente, aguarde 1 minuto e tente novamente");
+            throw new BusinessException("Uma doação já foi registrada recentemente, aguarde 1 minuto e tente novamente");
         }
     }
 

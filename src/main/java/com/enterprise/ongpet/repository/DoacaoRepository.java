@@ -15,6 +15,6 @@ public interface DoacaoRepository extends JpaRepository<Doacao, Long> {
     @Override
     Page<Doacao> findAll(Pageable pageable);
 
-    boolean existsByUsuarioAndDataCriacaoBetween(Usuario usuario, LocalDateTime inicio, LocalDateTime fim);
+    boolean existsByDoadorAndDataBetween(Usuario usuario, LocalDateTime inicio, LocalDateTime fim);
 
 }
