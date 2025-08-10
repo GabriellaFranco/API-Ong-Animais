@@ -1,6 +1,5 @@
 package com.enterprise.ongpet.model.dto.usuario;
 
-import com.enterprise.ongpet.enums.PerfilUsuario;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
 import lombok.Builder;
@@ -24,9 +23,7 @@ public record UsuarioUpdateDTO(
         String rua,
 
         @Pattern(regexp = "^[0-9]+$", message = "Apenas números sõ permitidos neste campo")
-        Long numEndereco,
-
-        PerfilUsuario perfil
+        Long numEndereco
 
         ) {
 }

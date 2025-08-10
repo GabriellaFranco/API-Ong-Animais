@@ -1,5 +1,8 @@
 package com.enterprise.ongpet.service;
 
+import com.enterprise.ongpet.enums.Especie;
+import com.enterprise.ongpet.enums.Genero;
+import com.enterprise.ongpet.enums.PorteAnimal;
 import com.enterprise.ongpet.exception.BusinessException;
 import com.enterprise.ongpet.exception.ResourceNotFoundException;
 import com.enterprise.ongpet.mapper.AnimalMapper;
@@ -25,6 +28,13 @@ public class AnimalService {
 
     public Page<AnimalResponseDTO> getAllAnimais(Pageable pageable) {
         var animais = animalRepository.findAll(pageable);
+        return animais.map(animalMapper::toAnimalResponseDTO);
+    }
+
+    public Page<AnimalResponseDTO> getAnimalsByFilter(String nome, Especie especie, PorteAnimal porte,
+                                                      Genero genero, Boolean disponivel ,Pageable pageable) {
+
+        var animais = animalRepository.findByFilter(nome, especie, genero, porte, disponivel, pageable);
         return animais.map(animalMapper::toAnimalResponseDTO);
     }
 

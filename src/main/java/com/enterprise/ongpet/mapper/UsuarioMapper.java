@@ -49,6 +49,5 @@ public class UsuarioMapper {
         Optional.ofNullable(updateDTO.bairro()).ifPresent(usuarioAtual::setBairro);
         Optional.ofNullable(updateDTO.rua()).ifPresent(usuarioAtual::setRua);
         Optional.ofNullable(updateDTO.numEndereco()).ifPresent(usuarioAtual::setNumEndereco);
-        Optional.ofNullable(updateDTO.perfil()).ifPresent(usuarioAtual::setPerfil);
     }
 }
