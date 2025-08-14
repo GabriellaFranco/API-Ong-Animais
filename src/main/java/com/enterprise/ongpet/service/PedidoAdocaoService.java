@@ -40,6 +40,13 @@ public class PedidoAdocaoService {
         return pedidos.map(pedidoAdocaoMapper::toPedidoAdocaoResponseDTO);
     }
 
+    public Page<PedidoAdocaoResponseDTO> getPedidosByFilters(StatusAdocao statusAdocao, LocalDate dataPedido,
+                                                             String adotante, String voluntarioResponsavel, Pageable pageable) {
+
+        var pedidos = pedidoAdocaoRepository.findByFilters(statusAdocao, dataPedido, adotante, voluntarioResponsavel, pageable);
+        return pedidos.map(pedidoAdocaoMapper::toPedidoAdocaoResponseDTO);
+    }
+
     public PedidoAdocaoResponseDTO getPedidoAdocaoById(Long id) {
         return pedidoAdocaoRepository.findById(id).map(pedidoAdocaoMapper::toPedidoAdocaoResponseDTO)
                 .orElseThrow(() -> new ResourceNotFoundException("Pedido de Adoção não encontrado: " + id));
@@ -92,7 +99,7 @@ public class PedidoAdocaoService {
     }
 
     private void validarLimiteDePedidosPendentesPorUsuario(Usuario usuario) {
-        var pedidosPendentes = pedidoAdocaoRepository.countByUsuarioAndStatus(usuario, StatusAdocao.SOLICITADA);
+        var pedidosPendentes = pedidoAdocaoRepository.countByAdotanteAndStatus(usuario, StatusAdocao.SOLICITADA);
         if (pedidosPendentes >= 3) {
             throw new BusinessException("Você já possui 3 pedidos de adoção pendentes. Aguarde avaliação antes de criar novos pedidos");
         }

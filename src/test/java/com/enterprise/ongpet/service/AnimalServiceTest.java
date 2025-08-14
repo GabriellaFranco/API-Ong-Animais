@@ -146,7 +146,7 @@ public class AnimalServiceTest {
     void createAnimal_quandoTentarCriarRegistroRepetido_deveLancarExcecao() {
         var usuarioLogado = usuarioService.getUsuarioLogado();
 
-        when(animalRepository.existsByNomeAndEspecieAndUsuario(
+        when(animalRepository.existsByNomeAndEspecieAndResponsavel(
                 animalRequestDTO.nome(), animalRequestDTO.especie(), usuarioLogado)).thenReturn(true);
 
         assertThrows(BusinessException.class, () -> animalService.createAnimal(animalRequestDTO));

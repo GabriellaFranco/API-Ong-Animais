@@ -38,6 +38,11 @@ public class UsuarioService {
         return usuarios.map(usuarioMapper::toUsuarioResponseDTO);
     }
 
+    public Page<UsuarioResponseDTO> getUsuariosByFilter(String nome, String cpf, String cidade, PerfilUsuario perfil,Pageable pageable) {
+        var usuarios = usuarioRepository.findByFilter(nome, cpf, cidade, perfil,pageable);
+        return usuarios.map(usuarioMapper::toUsuarioResponseDTO);
+    }
+
     public UsuarioResponseDTO getUsuarioById(Long id) {
         return usuarioRepository.findById(id).map(usuarioMapper::toUsuarioResponseDTO)
                 .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado: " + id));

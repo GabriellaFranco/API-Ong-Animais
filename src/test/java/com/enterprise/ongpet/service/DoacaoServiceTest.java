@@ -126,7 +126,7 @@ public class DoacaoServiceTest {
     void createDoacao_quandoTentarCriarDoacaoDeMesmoValorComMenosDe1MinutoDeIntervalo_deveLancarExcecao() {
         var usuarioLogado = usuarioService.getUsuarioLogado();
         when(usuarioService.getUsuarioLogado()).thenReturn(usuarioLogado);
-        when(doacaoRepository.existsByUsuarioAndDataCriacaoBetween(
+        when(doacaoRepository.existsByDoadorAndDataBetween(
                 Mockito.eq(usuarioLogado),
                 Mockito.<LocalDateTime>any(),
                 Mockito.<LocalDateTime>any()

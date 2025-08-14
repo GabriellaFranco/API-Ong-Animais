@@ -169,7 +169,7 @@ public class PedidoAdocaoServiceTest {
         usuarioLogado.setId(1L);
 
         when(usuarioService.getUsuarioLogado()).thenReturn(usuarioLogado);
-        when(pedidoAdocaoRepository.countByUsuarioAndStatus(usuarioLogado, StatusAdocao.SOLICITADA)).thenReturn(3L);
+        when(pedidoAdocaoRepository.countByAdotanteAndStatus(usuarioLogado, StatusAdocao.SOLICITADA)).thenReturn(3L);
         assertThrows(BusinessException.class, () -> pedidoAdocaoService.createPedidoAdocao(pedidoAdocaoRequestDTO));
     }
 

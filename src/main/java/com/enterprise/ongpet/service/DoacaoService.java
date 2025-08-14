@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @RequiredArgsConstructor
@@ -28,6 +29,11 @@ public class DoacaoService {
 
     public Page<DoacaoResponseDTO> getAllDoacoes(Pageable pageable) {
         var doacoes = doacaoRepository.findAll(pageable);
+        return doacoes.map(doacaoMapper::toDoacaoResponseDTO);
+    }
+
+    public Page<DoacaoResponseDTO> getDoacoesByFilters(String doador, LocalDate data, BigDecimal valor, Pageable pageable) {
+        var doacoes = doacaoRepository.findByFilters(doador, data, valor, pageable);
         return doacoes.map(doacaoMapper::toDoacaoResponseDTO);
     }
 
@@ -64,10 +70,10 @@ public class DoacaoService {
     private void validarIntervaloMinimoEntreDoacoes(Usuario usuario) {
         var agora = LocalDateTime.now();
         var inicio = agora.minusMinutes(1);
-        boolean existe = doacaoRepository.existsByUsuarioAndDataCriacaoBetween(usuario, inicio, agora);
+        boolean existe = doacaoRepository.existsByDoadorAndDataBetween(usuario, inicio, agora);
 
         if (existe) {
-            throw new BusinessException("Uma doação com o mesmo valor já foi registrada recentemente, aguarde 1 minuto e tente novamente");
+            throw new BusinessException("Uma doação já foi registrada recentemente, aguarde 1 minuto e tente novamente");
         }
     }
 
