@@ -1,4 +1,4 @@
-package com.enterprise.ong_pet;
+package com.enterprise.ongpet;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
