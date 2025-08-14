@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @RequiredArgsConstructor
@@ -28,6 +29,11 @@ public class DoacaoService {
 
     public Page<DoacaoResponseDTO> getAllDoacoes(Pageable pageable) {
         var doacoes = doacaoRepository.findAll(pageable);
+        return doacoes.map(doacaoMapper::toDoacaoResponseDTO);
+    }
+
+    public Page<DoacaoResponseDTO> getDoacoesByFilters(String doador, LocalDate data, BigDecimal valor, Pageable pageable) {
+        var doacoes = doacaoRepository.findByFilters(doador, data, valor, pageable);
         return doacoes.map(doacaoMapper::toDoacaoResponseDTO);
     }
 

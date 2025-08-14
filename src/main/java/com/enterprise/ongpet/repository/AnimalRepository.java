@@ -21,15 +21,13 @@ public interface AnimalRepository extends JpaRepository<Animal, Long> {
     boolean existsByNomeAndEspecieAndResponsavel(String nome, Especie especie, Usuario responsavel);
 
     @Query("""
-        SELECT a FROM Animal a
-        WHERE (:nome IS NULL OR LOWER(u.nome) LIKE LOWER(CONCAT('%', :nome, '%')))
-        AND (:especie IS NULL OR a.especie = :especie)
-        AND (:genero IS NULL OR a.genero = :genero)
-        AND (:porte IS NULL OR a.porte = :porte)
-        AND (:disponivel IS NULL OR a.disponivel = :disponivel)
-        ORDER BY
-            CASE WHEN :nome IS NOT NULL AND LOWER(u.nome) = LOWER(:nome) THEN 0 ELSE 1 END
-    """)
+                SELECT a FROM Animal a
+                WHERE (:nome IS NULL OR LOWER(a.nome) LIKE LOWER(CONCAT('%', :nome, '%')))
+                  AND (:especie IS NULL OR a.especie = :especie)
+                  AND (:genero IS NULL OR a.genero = :genero)
+                  AND (:porte IS NULL OR a.porte = :porte)
+                  AND (:disponivel IS NULL OR a.disponivel = :disponivel)
+            """)
     Page<Animal> findByFilter(
             @Param("nome") String nome,
             @Param("especie") Especie especie,

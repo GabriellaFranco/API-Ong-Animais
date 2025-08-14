@@ -37,7 +37,7 @@ public class AnimalController {
             }
     )
     @GetMapping
-    public ResponseEntity<Page<AnimalResponseDTO>> getAllAnimais(@PageableDefault(page = 0, size = 10, sort = "id") Pageable pageable) {
+    public ResponseEntity<Page<AnimalResponseDTO>> getAllAnimais(@PageableDefault(page = 1, size = 10, sort = "id") Pageable pageable) {
         var animais = animalService.getAllAnimais(pageable);
         return animais.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(animais);
     }
@@ -46,7 +46,7 @@ public class AnimalController {
             summary = "Retorna um animal com o id informado",
             responses = {
                     @ApiResponse(responseCode = "200", description = "Sucesso"),
-                    @ApiResponse(responseCode = "404", description = "Usuário não encontrado")
+                    @ApiResponse(responseCode = "404", description = "Animal não encontrado")
             }
     )
     @GetMapping("/{id}")
@@ -69,17 +69,18 @@ public class AnimalController {
     }
 
     @Operation(
-            summary = "Localiza o animal com o id informado e atualiza as informações necessárias. Para chamar este endpoint" +
-                    "é necessário possuir a autoridade/role 'VOLUNTARIO'",
+            summary = "Localiza o animal com o id informado e atualiza sua disponibilidade. Para chamar este endpoint" +
+                    " é necessário possuir a autoridade/role 'VOLUNTARIO'",
             responses = {
                     @ApiResponse(responseCode = "201", description = "Sucesso"),
                     @ApiResponse(responseCode = "400", description = "Informações inválidas"),
-                    @ApiResponse(responseCode = "404", description = "Usuário não encontrado")
+                    @ApiResponse(responseCode = "403", description = "Usuário sem permissão"),
+                    @ApiResponse(responseCode = "404", description = "Animal não encontrado")
             }
     )
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     @PreAuthorize("hasHole('VOLUNTARIO')")
-    public ResponseEntity<AnimalResponseDTO> updateAnimal (@PathVariable Long id, @Valid @RequestBody AnimalUpdateDTO animalDTO) {
+    public ResponseEntity<AnimalResponseDTO> updateStatusAnimal (@PathVariable Long id, @Valid @RequestBody AnimalUpdateDTO animalDTO) {
         return ResponseEntity.ok(animalService.updateAnimal(id, animalDTO));
     }
 
@@ -87,7 +88,7 @@ public class AnimalController {
             summary = "Exclui o animal com o id informado",
             responses = {
                     @ApiResponse(responseCode = "201", description = "Sucesso"),
-                    @ApiResponse(responseCode = "404", description = "Usuário não encontrado")
+                    @ApiResponse(responseCode = "404", description = "Animal não encontrado")
             }
     )
     @DeleteMapping("/{id}")

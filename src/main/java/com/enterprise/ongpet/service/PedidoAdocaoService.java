@@ -40,6 +40,13 @@ public class PedidoAdocaoService {
         return pedidos.map(pedidoAdocaoMapper::toPedidoAdocaoResponseDTO);
     }
 
+    public Page<PedidoAdocaoResponseDTO> getPedidosByFilters(StatusAdocao statusAdocao, LocalDate dataPedido,
+                                                             String adotante, String voluntarioResponsavel, Pageable pageable) {
+
+        var pedidos = pedidoAdocaoRepository.findByFilters(statusAdocao, dataPedido, adotante, voluntarioResponsavel, pageable);
+        return pedidos.map(pedidoAdocaoMapper::toPedidoAdocaoResponseDTO);
+    }
+
     public PedidoAdocaoResponseDTO getPedidoAdocaoById(Long id) {
         return pedidoAdocaoRepository.findById(id).map(pedidoAdocaoMapper::toPedidoAdocaoResponseDTO)
                 .orElseThrow(() -> new ResourceNotFoundException("Pedido de Adoção não encontrado: " + id));

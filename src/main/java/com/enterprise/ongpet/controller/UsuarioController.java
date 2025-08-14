@@ -33,7 +33,7 @@ public class UsuarioController {
             }
     )
     @GetMapping
-    public ResponseEntity<Page<UsuarioResponseDTO>> getAllUsuarios(@PageableDefault(page = 0, size = 10, sort = "id")
+    public ResponseEntity<Page<UsuarioResponseDTO>> getAllUsuarios(@PageableDefault(page = 1, size = 10, sort = "id")
                                                                    Pageable pageable) {
         var usuarios = usuarioService.getAllUsuarios(pageable);
         return usuarios.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(usuarios);

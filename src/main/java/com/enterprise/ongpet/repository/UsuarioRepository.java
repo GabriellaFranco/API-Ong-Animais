@@ -24,16 +24,16 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     List<Usuario> findByPerfil(PerfilUsuario perfil);
 
     @Query("""
-        SELECT u FROM Usuario u
-        WHERE (:nome IS NULL OR LOWER(u.nome) LIKE LOWER(CONCAT('%', :nome, '%')))
-        AND (:cpf IS NULL OR u.cpf LIKE CONCAT('%', :cpf, '%'))
-        AND (:cidade IS NULL OR LOWER(u.cidade) LIKE LOWER(CONCAT('%', :cidade, '%')))
-        AND (:perfil IS NULL OR u.perfil = :perfil)
-        ORDER BY
-            CASE WHEN :nome IS NOT NULL AND LOWER(u.nome) = LOWER(:nome) THEN 0 ELSE 1 END,
-            CASE WHEN :cpf IS NOT NULL AND u.cpf = :cpf THEN 0 ELSE 1 END,
-            CASE WHEN :cidade IS NOT NULL AND LOWER(u.cidade) = LOWER(:cidade) THEN 0 ELSE 1 END
-    """)
+                SELECT u FROM Usuario u
+                WHERE (:nome IS NULL OR LOWER(u.nome) LIKE LOWER(CONCAT('%', :nome, '%')))
+                AND (:cpf IS NULL OR u.cpf LIKE CONCAT('%', :cpf, '%'))
+                AND (:cidade IS NULL OR LOWER(u.cidade) LIKE LOWER(CONCAT('%', :cidade, '%')))
+                AND (:perfil IS NULL OR u.perfil = :perfil)
+                ORDER BY
+                    CASE WHEN :nome IS NOT NULL AND LOWER(u.nome) = LOWER(:nome) THEN 0 ELSE 1 END,
+                    CASE WHEN :cpf IS NOT NULL AND u.cpf = :cpf THEN 0 ELSE 1 END,
+                    CASE WHEN :cidade IS NOT NULL AND LOWER(u.cidade) = LOWER(:cidade) THEN 0 ELSE 1 END
+            """)
     Page<Usuario> findByFilter(@Param("nome") String nome, @Param("cpf") String cpf, @Param("cidade") String cidade,
                                @Param("perfil") PerfilUsuario perfil, Pageable pageable);
 
