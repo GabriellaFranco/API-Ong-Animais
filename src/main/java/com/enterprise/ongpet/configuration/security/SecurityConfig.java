@@ -71,9 +71,10 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/pedidos-adocao").hasRole("PADRAO")
                         .requestMatchers(HttpMethod.PATCH, "/pedidos-adocao/**").hasRole("VOLUNTARIO")
                         .requestMatchers(HttpMethod.DELETE, "/pedidos-adocao/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET, "/pedido-adocao").hasAnyRole("ADMIN", "VOLUNTARIO")
-                        .requestMatchers(HttpMethod.GET, "/pedido-adocao/**").hasAnyRole("ADMIN", "VOLUNTARIO", "PADRAO")
+                        .requestMatchers(HttpMethod.GET, "/pedidos-adocao").hasAnyRole("ADMIN", "VOLUNTARIO")
+                        .requestMatchers(HttpMethod.GET, "/pedidos-adocao/**").hasAnyRole("ADMIN", "VOLUNTARIO", "PADRAO")
                 )
+                .authorizeHttpRequests(request -> request.anyRequest().authenticated())
                 .addFilterBefore(jwtTokenValidator, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(requestLoggingFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(performanceLoggingFilter, UsernamePasswordAuthenticationFilter.class);
