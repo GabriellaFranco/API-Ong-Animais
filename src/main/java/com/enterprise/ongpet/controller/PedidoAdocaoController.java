@@ -28,9 +28,11 @@ public class PedidoAdocaoController {
     private final PedidoAdocaoService pedidoAdocaoService;
 
     @Operation(
-            summary = "Retorna todos os pedidos de adoção, em páginas com 10 objetos ordenados por id",
+            summary = "Retorna todos os pedidos de adoção, em páginas com 10 objetos ordenados por id. Para chamar este endpoint" +
+                    " é necessário possuir a autoridade/role 'VOLUNTARIO' ou 'ADMIN'",
             responses = {
                     @ApiResponse(responseCode = "200", description = "Sucesso"),
+                    @ApiResponse(responseCode = "403", description = "Usuário sem permissão"),
                     @ApiResponse(responseCode = "204", description = "Nenhum registro a exibir")
             }
     )
@@ -55,13 +57,16 @@ public class PedidoAdocaoController {
     }
 
     @Operation(
-            summary = "Cria um novo pedido de adoção",
+            summary = "Cria um novo pedido de adoção. Para chamar este endpoint" +
+                    " é necessário possuir a autoridade/role 'PADRAO'",
             responses = {
                     @ApiResponse(responseCode = "201", description = "Sucesso"),
+                    @ApiResponse(responseCode = "403", description = "Usuário sem permissão"),
                     @ApiResponse(responseCode = "400", description = "Informações inválidas")
             }
     )
     @PostMapping
+    @PreAuthorize("hasRole('PADRAO')")
     public ResponseEntity<PedidoAdocaoResponseDTO> createPedidoAdocao(@Valid @RequestBody PedidoAdocaoRequestDTO pedidoDTO) {
         var pedido = pedidoAdocaoService.createPedidoAdocao(pedidoDTO);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(pedido.id()).toUri();
@@ -88,9 +93,11 @@ public class PedidoAdocaoController {
     }
 
     @Operation(
-            summary = "Exclui o pedido de adoção com o id informado",
+            summary = "Exclui o pedido de adoção com o id informado. Para chamar este endpoint" +
+                    " é necessário possuir a autoridade/role 'ADMIN'",
             responses = {
                     @ApiResponse(responseCode = "201", description = "Sucesso"),
+                    @ApiResponse(responseCode = "403", description = "Usuário sem permissão"),
                     @ApiResponse(responseCode = "404", description = "Pedido não encontrado")
             }
     )    @DeleteMapping("/{id}")
@@ -100,13 +107,16 @@ public class PedidoAdocaoController {
     }
 
     @Operation(
-            summary = "Retorna todas os pedidos de adoção que combinam com os parâmetros inseridos (um ou todos) ",
+            summary = "Retorna todas os pedidos de adoção que combinam com os parâmetros inseridos (um ou todos). Para chamar este " +
+                    "endpoint é necessário possuir a autoridade/role 'VOLUNTARIO' ou 'ADMIN'",
             responses = {
                     @ApiResponse(responseCode = "200", description = "Sucesso"),
+                    @ApiResponse(responseCode = "403", description = "Usuário sem permissão"),
                     @ApiResponse(responseCode = "204", description = "Nenhum registro a exibir")
             }
     )
     @GetMapping("/results")
+    @PreAuthorize("hasAnyRole('ADMIN', 'VOLUNTARIO')")
     public ResponseEntity<Page<PedidoAdocaoResponseDTO>> getPedidosAdocaoByFilters(@RequestParam(required = false) StatusAdocao status,
                                                                                    @RequestParam(required = false) LocalDate dataPedido,
                                                                                    @RequestParam(required = false) String adotante,

@@ -62,14 +62,7 @@ public class AuthController {
         return ResponseEntity.ok("Perfil e autoridades de usuário atualizadas com sucesso");
     }
 
-    @Operation(
-            summary = "Autentica o usuário e retorna um token JWT",
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "Sucesso"),
-                    @ApiResponse(responseCode = "400", description = "Dados inválidos"),
-                    @ApiResponse(responseCode = "401", description = "Credenciais inválidas")
-            }
-    )
+     
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDTO> login(@Valid @RequestBody LoginRequestDTO loginRequest) {
         Authentication authentication = authenticationManager.authenticate(
