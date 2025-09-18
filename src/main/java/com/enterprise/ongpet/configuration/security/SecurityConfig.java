@@ -40,41 +40,10 @@ public class SecurityConfig {
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .csrf(AbstractHttpConfigurer::disable)
-                //Autenticação
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers(HttpMethod.PATCH, "/auth/usuarios/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PATCH, "/auth/alterar-senha").hasAnyRole("ADMIN", "VOLUNTARIO", "PADRAO")
                         .requestMatchers("/auth/login", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                        .anyRequest().authenticated()
                 )
-                //Usuário
-                .authorizeHttpRequests(request -> request
-                        .requestMatchers(HttpMethod.PUT, "/usuarios/**").hasRole("PADRAO")
-                        .requestMatchers(HttpMethod.POST, "/usuarios").hasAnyRole("PADRAO", "ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/usuarios/**").hasAnyRole("PADRAO", "ADMIN")
-                        .requestMatchers(HttpMethod.GET, "/usuarios", "/usuarios/**").hasAnyRole("ADMIN", "VOLUNTARIO")
-                )
-                //Animais
-                .authorizeHttpRequests(request -> request
-                        .requestMatchers(HttpMethod.POST, "/animais").hasAnyRole("PADRAO")
-                        .requestMatchers(HttpMethod.PATCH, "/animais/**").hasRole("VOLUNTARIO")
-                        .requestMatchers(HttpMethod.GET, "/animais", "/animais/**").hasAnyRole("ADMIN", "VOLUNTARIO", "PADRAO")
-                        .requestMatchers(HttpMethod.DELETE, "/animais/**").hasAnyRole("ADMIN", "VOLUNTARIO", "PADRAO")
-                )
-                //Doações
-                .authorizeHttpRequests(request -> request
-                        .requestMatchers(HttpMethod.GET, "/doacoes", "/doacoes/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/doacoes").hasRole("PADRAO")
-                        .requestMatchers(HttpMethod.DELETE, "/doacoes/**").hasAnyRole("ADMIN", "PADRAO")
-                )
-                //Pedidos Adoção
-                .authorizeHttpRequests(request -> request
-                        .requestMatchers(HttpMethod.POST, "/pedidos-adocao").hasRole("PADRAO")
-                        .requestMatchers(HttpMethod.PATCH, "/pedidos-adocao/**").hasRole("VOLUNTARIO")
-                        .requestMatchers(HttpMethod.DELETE, "/pedidos-adocao/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET, "/pedidos-adocao").hasAnyRole("ADMIN", "VOLUNTARIO")
-                        .requestMatchers(HttpMethod.GET, "/pedidos-adocao/**").hasAnyRole("ADMIN", "VOLUNTARIO", "PADRAO")
-                )
-                .authorizeHttpRequests(request -> request.anyRequest().authenticated())
                 .addFilterBefore(jwtTokenValidator, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(requestLoggingFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(performanceLoggingFilter, UsernamePasswordAuthenticationFilter.class);

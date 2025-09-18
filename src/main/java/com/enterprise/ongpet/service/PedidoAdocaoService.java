@@ -35,11 +35,13 @@ public class PedidoAdocaoService {
     private final PedidoAdocaoMapper pedidoAdocaoMapper;
     private final UsuarioService usuarioService;
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'VOLUNTARIO')")
     public Page<PedidoAdocaoResponseDTO> getAllPedidosAdocao(Pageable pageable) {
         var pedidos = pedidoAdocaoRepository.findAll(pageable);
         return pedidos.map(pedidoAdocaoMapper::toPedidoAdocaoResponseDTO);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'VOLUNTARIO')")
     public Page<PedidoAdocaoResponseDTO> getPedidosByFilters(StatusAdocao statusAdocao, LocalDate dataPedido,
                                                              String adotante, String voluntarioResponsavel, Pageable pageable) {
 
@@ -53,6 +55,7 @@ public class PedidoAdocaoService {
     }
 
     @Transactional
+    @PreAuthorize("hasRole('PADRAO')")
     public PedidoAdocaoResponseDTO createPedidoAdocao(PedidoAdocaoRequestDTO pedidoAdocaoDTO) {
         var adotante = usuarioService.getUsuarioLogado();
         validarLimiteDePedidosPendentesPorUsuario(adotante);
@@ -81,6 +84,7 @@ public class PedidoAdocaoService {
     }
 
     @Transactional
+    @PreAuthorize("hasRole('ADMIN')")
     public void deletePedidoAdocao(Long id) {
         var pedidoAdocao = validarSePedidoAdocaoEstaConcluido(id);
         pedidoAdocaoRepository.delete(pedidoAdocao);
