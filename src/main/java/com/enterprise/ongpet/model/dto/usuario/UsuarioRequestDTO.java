@@ -43,7 +43,7 @@ public record UsuarioRequestDTO(
         String rua,
 
         @NotBlank
-        @Pattern(regexp = "^[0-9]+$", message = "Apenas números sõ permitidos neste campo")
+        @Pattern(regexp = "^[0-9]+$", message = "Apenas números são permitidos neste campo")
         Long numEndereco,
 
         @NotBlank

@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -26,13 +27,16 @@ public class UsuarioController {
     private final UsuarioService usuarioService;
 
     @Operation(
-            summary = "Retorna todos os usuários, em páginas com 10 objetos ordenados por id",
+            summary = "Retorna todos os usuários, em páginas com 10 objetos ordenados por id. Para chamar este endpoint" +
+                    " é necessário possuir a autoridade/role 'ADMIN'",
             responses = {
                     @ApiResponse(responseCode = "200", description = "Sucesso"),
+                    @ApiResponse(responseCode = "403", description = "Usuário sem permissão"),
                     @ApiResponse(responseCode = "204", description = "Nenhum registro a exibir")
             }
     )
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Page<UsuarioResponseDTO>> getAllUsuarios(@PageableDefault(page = 1, size = 10, sort = "id")
                                                                    Pageable pageable) {
         var usuarios = usuarioService.getAllUsuarios(pageable);
@@ -40,13 +44,16 @@ public class UsuarioController {
     }
 
     @Operation(
-            summary = "Retorna um usuário com o id informado",
+            summary = "Retorna um usuário com o id informado. Para chamar este endpoint" +
+                    " é necessário possuir a autoridade/role 'ADMIN'",
             responses = {
                     @ApiResponse(responseCode = "200", description = "Sucesso"),
+                    @ApiResponse(responseCode = "403", description = "Usuário sem permissão"),
                     @ApiResponse(responseCode = "404", description = "Usuário não encontrado")
             }
     )
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UsuarioResponseDTO> getUsuarioById(@PathVariable Long id) {
         return ResponseEntity.ok(usuarioService.getUsuarioById(id));
     }
@@ -79,26 +86,32 @@ public class UsuarioController {
     }
 
     @Operation(
-            summary = "Exclui o usuário com o id informado",
+            summary = "Exclui o usuário com o id informado. Para chamar este endpoint" +
+                    " é necessário possuir a autoridade/role 'ADMIN'",
             responses = {
                     @ApiResponse(responseCode = "201", description = "Sucesso"),
+                    @ApiResponse(responseCode = "403", description = "Usuário sem permissão"),
                     @ApiResponse(responseCode = "404", description = "Usuário não encontrado")
             }
     )
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> deleteUsuario(@PathVariable Long id) {
         usuarioService.deleteUsuario(id);
         return ResponseEntity.ok("Usuario deletado com sucesso: " + id);
     }
 
     @Operation(
-            summary = "Retorna todos os usuários que combinam com os parâmetros inseridos (um ou todos) ",
+            summary = "Retorna todos os usuários que combinam com os parâmetros inseridos (um ou todos). Para chamar este endpoint" +
+                    " é necessário possuir a autoridade/role 'ADMIN'",
             responses = {
                     @ApiResponse(responseCode = "200", description = "Sucesso"),
+                    @ApiResponse(responseCode = "403", description = "Usuário sem permissão"),
                     @ApiResponse(responseCode = "204", description = "Nenhum registro a exibir")
             }
     )
     @GetMapping("/results")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Page<UsuarioResponseDTO>> getUsuariosByFilter(@RequestBody(required = false) String nome,
                                                                         @RequestBody(required = false) String cpf,
                                                                         @RequestBody(required = false) String cidade,

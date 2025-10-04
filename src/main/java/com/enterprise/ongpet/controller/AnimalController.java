@@ -28,7 +28,6 @@ public class AnimalController {
 
     private final AnimalService animalService;
 
-
     @Operation(
             summary = "Retorna todos os animais, em páginas com 10 objetos ordenados por id",
             responses = {
@@ -55,13 +54,16 @@ public class AnimalController {
     }
 
     @Operation(
-            summary = "Cria um novo animal",
+            summary = "Cria um novo animal. Para chamar este endpoint é necessário possuir a " +
+                    "autoridade/role 'PADRAO'",
             responses = {
                     @ApiResponse(responseCode = "201", description = "Sucesso"),
+                    @ApiResponse(responseCode = "403", description = "Usuário sem permissão"),
                     @ApiResponse(responseCode = "400", description = "Informações inválidas")
             }
     )
     @PostMapping
+    @PreAuthorize("hasRole('PADRAO')")
     public ResponseEntity<AnimalResponseDTO> createAnimal(@Valid @RequestBody AnimalRequestDTO animalDTO) {
         var animal = animalService.createAnimal(animalDTO);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(animal.id()).toUri();
@@ -85,13 +87,15 @@ public class AnimalController {
     }
 
     @Operation(
-            summary = "Exclui o animal com o id informado",
+            summary = "Exclui o animal com o id informado. Para chamar este endpoint" +
+                    " é necessário possuir a autoridade/role 'ADMIN'",
             responses = {
                     @ApiResponse(responseCode = "201", description = "Sucesso"),
                     @ApiResponse(responseCode = "404", description = "Animal não encontrado")
             }
     )
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> deleteAnimal(@PathVariable Long id) {
         animalService.deleteAnimal(id);
         return ResponseEntity.ok("Animal excluído com sucesso: " + id);

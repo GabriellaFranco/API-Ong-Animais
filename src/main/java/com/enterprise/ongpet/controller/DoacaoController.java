@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -26,13 +27,16 @@ public class DoacaoController {
     private final DoacaoService doacaoService;
 
     @Operation(
-            summary = "Retorna todas as doações, em páginas com 10 objetos ordenados por id",
+            summary = "Retorna todas as doações, em páginas com 10 objetos ordenados por id. Para chamar este endpoint" +
+                    " é necessário possuir a autoridade/role 'ADMIN'",
             responses = {
                     @ApiResponse(responseCode = "200", description = "Sucesso"),
+                    @ApiResponse(responseCode = "403", description = "Usuário sem permissão"),
                     @ApiResponse(responseCode = "204", description = "Nenhum registro a exibir")
             }
     )
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Page<DoacaoResponseDTO>> getAllDoacoes(@PageableDefault(page = 1, size = 10, sort = "id") Pageable pageable) {
         var doacoes = doacaoService.getAllDoacoes(pageable);
         return doacoes.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(doacoes);
@@ -65,22 +69,27 @@ public class DoacaoController {
     }
 
     @Operation(
-            summary = "Exclui a doação com o id informado",
+            summary = "Exclui a doação com o id informado. Para chamar este endpoint" +
+                    " é necessário possuir a autoridade/role 'VOLUNTARIO' ou 'PADRAO'",
             responses = {
                     @ApiResponse(responseCode = "201", description = "Sucesso"),
+                    @ApiResponse(responseCode = "403", description = "Usuário sem permissão"),
                     @ApiResponse(responseCode = "404", description = "Doação não encontrada")
             }
     )
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'PADRAO')")
     public ResponseEntity<String> deleteDoacao(@PathVariable Long id) {
         doacaoService.deleteDoacao(id);
         return ResponseEntity.ok("Doação excluída com sucesso: " + id);
     }
 
     @Operation(
-            summary = "Retorna todas as doações que combinam com os parâmetros inseridos (um ou todos) ",
+            summary = "Retorna todas as doações que combinam com os parâmetros inseridos (um ou todos). Para chamar este endpoint" +
+                    " é necessário possuir a autoridade/role 'ADMIN'",
             responses = {
                     @ApiResponse(responseCode = "200", description = "Sucesso"),
+                    @ApiResponse(responseCode = "403", description = "Usuário sem permissão"),
                     @ApiResponse(responseCode = "204", description = "Nenhum registro a exibir")
             }
     )

@@ -11,6 +11,7 @@ import com.enterprise.ongpet.repository.DoacaoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,11 +28,13 @@ public class DoacaoService {
     private final UsuarioService usuarioService;
     private static final BigDecimal VALOR_MINIMO_DOACAO = new BigDecimal("1.00");
 
+    @PreAuthorize("hasRole('ADMIN')")
     public Page<DoacaoResponseDTO> getAllDoacoes(Pageable pageable) {
         var doacoes = doacaoRepository.findAll(pageable);
         return doacoes.map(doacaoMapper::toDoacaoResponseDTO);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     public Page<DoacaoResponseDTO> getDoacoesByFilters(String doador, LocalDate data, BigDecimal valor, Pageable pageable) {
         var doacoes = doacaoRepository.findByFilters(doador, data, valor, pageable);
         return doacoes.map(doacaoMapper::toDoacaoResponseDTO);
@@ -54,6 +57,7 @@ public class DoacaoService {
     }
 
     @Transactional
+    @PreAuthorize("hasAnyRole('ADMIN', 'PADRAO')")
     public void deleteDoacao(Long id) {
         var doacao = doacaoRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Doação não encontrada: " + id));

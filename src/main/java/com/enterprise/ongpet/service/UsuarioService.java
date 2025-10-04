@@ -15,6 +15,7 @@ import com.enterprise.ongpet.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -33,16 +34,19 @@ public class UsuarioService {
     private final AuthRepository authRepository;
     private final PasswordEncoder passwordEncoder;
 
+    @PreAuthorize("hasRole('ADMIN')")
     public Page<UsuarioResponseDTO> getAllUsuarios(Pageable pageable) {
         var usuarios = usuarioRepository.findAll(pageable);
         return usuarios.map(usuarioMapper::toUsuarioResponseDTO);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     public Page<UsuarioResponseDTO> getUsuariosByFilter(String nome, String cpf, String cidade, PerfilUsuario perfil,Pageable pageable) {
         var usuarios = usuarioRepository.findByFilter(nome, cpf, cidade, perfil,pageable);
         return usuarios.map(usuarioMapper::toUsuarioResponseDTO);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     public UsuarioResponseDTO getUsuarioById(Long id) {
         return usuarioRepository.findById(id).map(usuarioMapper::toUsuarioResponseDTO)
                 .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado: " + id));
@@ -76,6 +80,7 @@ public class UsuarioService {
     }
 
     @Transactional
+    @PreAuthorize("hasRole('ADMIN')")
     public void deleteUsuario(Long id) {
         var usuario = usuarioRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado: " + id));
@@ -92,11 +97,11 @@ public class UsuarioService {
 
     protected Usuario getUsuarioLogado() {
         var usuario = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (!(usuario instanceof UserDetails userDetails)) {
+        if (!(usuario instanceof String username)) {
             throw new BadCredentialsException("Usuário não autenticado");
         }
-        return usuarioRepository.findByEmail(userDetails.getUsername())
-                .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado: " + userDetails.getUsername()));
+        return usuarioRepository.findByEmail(username)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado: " + username));
     }
 
 }
