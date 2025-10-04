@@ -97,11 +97,11 @@ public class UsuarioService {
 
     protected Usuario getUsuarioLogado() {
         var usuario = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (!(usuario instanceof UserDetails userDetails)) {
+        if (!(usuario instanceof String username)) {
             throw new BadCredentialsException("Usuário não autenticado");
         }
-        return usuarioRepository.findByEmail(userDetails.getUsername())
-                .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado: " + userDetails.getUsername()));
+        return usuarioRepository.findByEmail(username)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado: " + username));
     }
 
 }
