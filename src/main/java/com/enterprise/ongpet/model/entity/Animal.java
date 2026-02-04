@@ -46,7 +46,9 @@ public class Animal {
     @Column(nullable = false)
     private Boolean disponivel;
 
-    @Column(nullable = false)
+    @ElementCollection
+    @CollectionTable(name="animal_fotos", joinColumns=@JoinColumn(name="animal_id"))
+    @Column(name="url_fotos")
     private List<String> fotos = new ArrayList<>();
 
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})

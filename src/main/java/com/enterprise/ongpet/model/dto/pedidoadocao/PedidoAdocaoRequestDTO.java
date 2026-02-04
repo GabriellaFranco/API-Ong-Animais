@@ -1,6 +1,7 @@
 package com.enterprise.ongpet.model.dto.pedidoadocao;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import org.springframework.lang.Nullable;
 
@@ -10,10 +11,10 @@ public record PedidoAdocaoRequestDTO(
         @Nullable
         String observacoes,
 
-        @NotBlank
+        @NotNull
         Long idAnimal,
 
-        @NotBlank
+        @NotNull
         Long idAdotante
 ) {
 }

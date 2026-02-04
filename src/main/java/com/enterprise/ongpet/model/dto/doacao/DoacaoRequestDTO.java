@@ -1,8 +1,6 @@
 package com.enterprise.ongpet.model.dto.doacao;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.*;
 import lombok.Builder;
 
 import java.math.BigDecimal;
@@ -10,9 +8,9 @@ import java.math.BigDecimal;
 @Builder
 public record DoacaoRequestDTO(
 
-        @NotBlank
-        @Positive
-        @Pattern(regexp = "^[0-9]+$", message = "Apenas números sõ permitidos neste campo")
+        @NotNull
+        @Positive(message = "A doação deve ser um valor positivo")
+        @Min(value = 1, message = "A doação minima é de R$1,00")
         BigDecimal valor
 ) {
 }
