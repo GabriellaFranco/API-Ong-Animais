@@ -43,8 +43,8 @@ public interface PedidoAdocaoRepository extends JpaRepository<PedidoAdocao, Long
                     CASE WHEN :adotante IS NOT NULL AND LOWER(p.adotante.nome) = LOWER(:adotante) THEN 0 ELSE 1 END,
                     CASE WHEN :voluntarioResponsavel IS NOT NULL AND LOWER(p.voluntarioResponsavel.nome) = LOWER(:voluntarioResponsavel) THEN 0 ELSE 1 END
             """)
-    Page<PedidoAdocao> findByFilters(@Param("status") StatusAdocao statusAdocao,
-                                     @Param("data") LocalDate dataPedido,
+    Page<PedidoAdocao> findByFilters(@Param("statusAdocao") StatusAdocao statusAdocao,
+                                     @Param("dataPedido") LocalDate dataPedido,
                                      @Param("adotante") String adotante,
                                      @Param("voluntarioResponsavel") String voluntarioResponsavel,
                                      Pageable pageable);

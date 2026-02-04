@@ -1,5 +1,7 @@
 package com.enterprise.ongpet.model.dto.animal;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
 
@@ -8,11 +10,14 @@ import java.util.List;
 @Builder
 public record AnimalUpdateDTO(
 
+        @NotBlank
         @Size(min = 10, max = 200, message = "A descrição deve ter entre 10 e 200 caracteres")
         String descricao,
 
+        @NotNull
         Boolean disponivel,
 
+        @NotBlank
         List<String> fotos
 ) {
 }

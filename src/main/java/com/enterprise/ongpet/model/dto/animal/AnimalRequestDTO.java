@@ -3,10 +3,7 @@ package com.enterprise.ongpet.model.dto.animal;
 import com.enterprise.ongpet.enums.Especie;
 import com.enterprise.ongpet.enums.Genero;
 import com.enterprise.ongpet.enums.PorteAnimal;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.Builder;
 
 import java.util.List;
@@ -18,18 +15,17 @@ public record AnimalRequestDTO(
         @Size(min = 3, max = 50, message = "O nome deve ter entre 3 e 50 caracteres")
         String nome,
 
-        @NotBlank
+        @NotNull
         Especie especie,
 
-        @NotBlank
+        @NotNull
         @Positive(message = "A idade deve ser um número positivo")
-        @Pattern(regexp = "^[0-9]+$", message = "Apenas números sõ permitidos neste campo")
         Long idade,
 
-        @NotBlank
+        @NotNull
         Genero genero,
 
-        @NotBlank
+        @NotNull
         PorteAnimal porte,
 
         @NotBlank

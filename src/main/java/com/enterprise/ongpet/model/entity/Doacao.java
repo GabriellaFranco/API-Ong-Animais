@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.User;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Builder
 @Data
@@ -22,7 +23,7 @@ public class Doacao {
     private Long id;
 
     @Column(nullable = false)
-    private LocalDate data;
+    private LocalDateTime data;
 
     @Column(nullable = false)
     private BigDecimal valor;

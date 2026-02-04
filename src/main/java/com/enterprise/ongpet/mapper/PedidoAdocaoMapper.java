@@ -19,6 +19,7 @@ public class PedidoAdocaoMapper {
                 .observacoes(pedidoAdocaoDTO.observacoes())
                 .adotante(adotante)
                 .voluntarioResponsavel(voluntario)
+                .animal(animal)
                 .build();
     }
 

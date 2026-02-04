@@ -24,7 +24,7 @@ public interface DoacaoRepository extends JpaRepository<Doacao, Long> {
     @Query("""
             SELECT d
             FROM Doacao d
-            WHERE (:doador IS NULL OR d.doador = :doador)
+            WHERE (:doador IS NULL OR LOWER(d.doador.nome) LIKE = :doador)
               AND (:data IS NULL OR d.data = :data)
               AND (:valor IS NULL OR d.valor = :valor)
             """)

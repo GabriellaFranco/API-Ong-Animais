@@ -1,10 +1,7 @@
 package com.enterprise.ongpet.model.dto.usuario;
 
 import com.enterprise.ongpet.enums.PerfilUsuario;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.Builder;
 
 @Builder
@@ -42,11 +39,11 @@ public record UsuarioRequestDTO(
         @Pattern(regexp = "^[A-Za-zÀ-ÿ\\s]+$", message = "Apenas letras são permitidas neste campo")
         String rua,
 
-        @NotBlank
+        @NotNull
         @Pattern(regexp = "^[0-9]+$", message = "Apenas números são permitidos neste campo")
         Long numEndereco,
 
-        @NotBlank
+        @NotNull
         PerfilUsuario perfil
 ) {
 }
