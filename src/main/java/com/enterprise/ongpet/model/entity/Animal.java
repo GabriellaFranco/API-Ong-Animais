@@ -27,6 +27,7 @@ public class Animal {
     private String nome;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private Especie especie;
 
     @Column(nullable = false)

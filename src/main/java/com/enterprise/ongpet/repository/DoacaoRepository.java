@@ -22,14 +22,16 @@ public interface DoacaoRepository extends JpaRepository<Doacao, Long> {
     boolean existsByDoadorAndDataBetween(Usuario usuario, LocalDateTime inicio, LocalDateTime fim);
 
     @Query("""
-            SELECT d
-            FROM Doacao d
-            WHERE (:doador IS NULL OR LOWER(d.doador.nome) LIKE = :doador)
-              AND (:data IS NULL OR d.data = :data)
-              AND (:valor IS NULL OR d.valor = :valor)
-            """)
+    SELECT d FROM Doacao d
+    WHERE (:doador IS NULL 
+           OR LOWER(d.doador.nome) LIKE LOWER(CONCAT('%', :doador, '%')))
+      AND (:data IS NULL 
+           OR d.data = :data)
+      AND (:valor IS NULL 
+           OR d.valor = :valor)
+""")
     Page<Doacao> findByFilters(@Param("doador") String doador,
-                               @Param("data") LocalDate data,
+                               @Param("data") LocalDateTime data,
                                @Param("valor") BigDecimal valor,
                                Pageable pageable);
 

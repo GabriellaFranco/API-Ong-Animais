@@ -32,7 +32,7 @@ public record AnimalRequestDTO(
         @Size(min = 10, max = 200, message = "A descrição deve ter entre 10 e 200 caracteres")
         String descricao,
 
-        @NotBlank
+        @NotEmpty
         List<String> fotos
 ) {
 }

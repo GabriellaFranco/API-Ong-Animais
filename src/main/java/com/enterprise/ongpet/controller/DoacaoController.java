@@ -18,6 +18,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.math.BigDecimal;
 import java.net.URI;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @RestController
 @RequiredArgsConstructor
@@ -95,7 +96,7 @@ public class DoacaoController {
     )
     @GetMapping("/results")
     public ResponseEntity<Page<DoacaoResponseDTO>> getDoacoesByFilters(@RequestParam(required = false) String doador,
-                                                                       @RequestParam(required = false) LocalDate data,
+                                                                       @RequestParam(required = false) LocalDateTime data,
                                                                        @RequestParam(required = false) BigDecimal valor,
                                                                        @PageableDefault(page = 1, size = 10, sort = "id")
                                                                            Pageable pageable) {

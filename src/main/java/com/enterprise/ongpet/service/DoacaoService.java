@@ -35,7 +35,7 @@ public class DoacaoService {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    public Page<DoacaoResponseDTO> getDoacoesByFilters(String doador, LocalDate data, BigDecimal valor, Pageable pageable) {
+    public Page<DoacaoResponseDTO> getDoacoesByFilters(String doador, LocalDateTime data, BigDecimal valor, Pageable pageable) {
         var doacoes = doacaoRepository.findByFilters(doador, data, valor, pageable);
         return doacoes.map(doacaoMapper::toDoacaoResponseDTO);
     }
