@@ -24,5 +24,4 @@ public class Autoridade {
     @ManyToMany(mappedBy = "autoridades", fetch = FetchType.EAGER)
     List<Usuario> usuarios = new ArrayList<>();
 
-    public Autoridade(String role) {}
 }

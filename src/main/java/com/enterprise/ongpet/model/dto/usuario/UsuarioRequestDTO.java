@@ -40,7 +40,7 @@ public record UsuarioRequestDTO(
         String rua,
 
         @NotNull
-        @Pattern(regexp = "^[0-9]+$", message = "Apenas números são permitidos neste campo")
+        @Positive(message = "O número de endereço deve ser positivo")
         Long numEndereco,
 
         @NotNull
